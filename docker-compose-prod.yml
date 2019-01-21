@@ -12,7 +12,7 @@ services:
       - APP_SETTINGS=project.config.ProductionConfig
       - DATABASE_URL=postgres://postgres:postgres@users-db:5432/users_prod
       - DATABASE_TEST_URL=postgres://postgres:postgres@users-db:5432/users_test
-      - SECRET_KEY=${SECRET_KEY}
+      - SECRET_KEY=my_precious
     depends_on:
       - users-db
 
@@ -46,6 +46,6 @@ services:
         - NODE_ENV=production
         - REACT_APP_USERS_SERVICE_URL=http://localhost
       ports:
-        - 3007:80
+        - '3007:80'
       depends_on:
         - users
