@@ -8,23 +8,23 @@ import Form from '../Form';
 const testData = [
   {
     formType: 'Register',
+    title: 'Register',
     formData: {
       username: '',
       email: '',
       password: ''
     },
-    handleUserFormSubmit: jest.fn(),
-    handleFormChange: jest.fn(),
+    loginUser: jest.fn(),
     isAuthenticated: false
   },
   {
     formType: 'Login',
+    title: 'Log In',
     formData: {
       email: '',
       password: ''
     },
-    handleUserFormSubmit: jest.fn(),
-    handleFormChange: jest.fn(),
+    loginUser: jest.fn(),
     isAuthenticated: false
   }
 ];
@@ -37,7 +37,7 @@ describe('When not authenticated', () => {
       const wrapper = shallow(component);
       const h1 = wrapper.find('h1');
       expect(h1.length).toBe(1);
-      expect(h1.get(0).props.children).toBe(el.formType);
+      expect(h1.get(0).props.children).toBe(el.title);
       const formGroup = wrapper.find('.field');
       expect(formGroup.get(0).props.children.props.name).toBe(
         Object.keys(el.formData)[0]
@@ -47,14 +47,18 @@ describe('When not authenticated', () => {
 
     it(`${el.formType} Form submits the form properly`, () => {
       const wrapper = shallow(component);
+      wrapper.instance().handleUserFormSubmit = jest.fn();
+      wrapper.update();
       const input = wrapper.find('input[type="email"]');
-      expect(el.handleUserFormSubmit).toHaveBeenCalledTimes(0);
-      expect(el.handleFormChange).toHaveBeenCalledTimes(0);
-      input.simulate('change');
-      expect(el.handleFormChange).toHaveBeenCalledTimes(1);
+      expect(wrapper.instance().handleUserFormSubmit).toHaveBeenCalledTimes(0);
+      input.simulate('change', {
+        target: { name: 'email', value: 'test@test.com' }
+      });
       wrapper.find('form').simulate('submit', el.formData);
-      expect(el.handleUserFormSubmit).toHaveBeenCalledWith(el.formData);
-      expect(el.handleUserFormSubmit).toHaveBeenCalledTimes(1);
+      expect(wrapper.instance().handleUserFormSubmit).toHaveBeenCalledWith(
+        el.formData
+      );
+      expect(wrapper.instance().handleUserFormSubmit).toHaveBeenCalledTimes(1);
     });
 
     it(`${el.formType} Form renders a snapshot properly`, () => {

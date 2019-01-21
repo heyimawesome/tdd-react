@@ -14,22 +14,11 @@ class App extends Component {
     super();
     this.state = {
       users: [],
-      username: '',
-      email: '',
       title: 'TestDriven.io',
-      formData: {
-        username: '',
-        email: '',
-        password: ''
-      },
       isAuthenticated: false
     };
 
-    this.addUser = this.addUser.bind(this);
-    this.clearFormState = this.clearFormState.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.handleUserFormSubmit = this.handleUserFormSubmit.bind(this);
-    this.handleFormChange = this.handleFormChange.bind(this);
+    this.loginUser = this.loginUser.bind(this);
     this.logoutUser = this.logoutUser.bind(this);
   }
 
@@ -54,68 +43,10 @@ class App extends Component {
       });
   }
 
-  addUser(event) {
-    event.preventDefault();
-
-    const data = {
-      username: this.state.username,
-      email: this.state.email
-    };
-
-    axios
-      .post(`${process.env.REACT_APP_USERS_SERVICE_URL}/users`, data)
-      .then(res => {
-        this.getUsers();
-        this.setState({ username: '', email: '' });
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  }
-
-  handleChange(event) {
-    const obj = {};
-    obj[event.target.name] = event.target.value;
-    this.setState(obj);
-  }
-
-  handleUserFormSubmit(event) {
-    event.preventDefault();
-    const formType = window.location.href.split('/').reverse()[0];
-    let data = {
-      email: this.state.formData.email,
-      password: this.state.formData.password
-    };
-    if (formType === 'register') {
-      data.username = this.state.formData.username;
-    }
-    const url = `${process.env.REACT_APP_USERS_SERVICE_URL}/auth/${formType}`;
-    console.log(data);
-    axios
-      .post(url, data)
-      .then(res => {
-        this.clearFormState();
-        window.localStorage.setItem('authToken', res.data.auth_token);
-        this.setState({ isAuthenticated: true });
-        this.getUsers();
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  }
-
-  handleFormChange(event) {
-    const obj = this.state.formData;
-    obj[event.target.name] = event.target.value;
-    this.setState(obj);
-  }
-
-  clearFormState() {
-    this.setState({
-      formData: { username: '', email: '', password: '' },
-      username: '',
-      email: ''
-    });
+  loginUser(token) {
+    window.localStorage.setItem('authToken', token);
+    this.setState({ isAuthenticated: true });
+    this.getUsers();
   }
 
   logoutUser() {
@@ -145,16 +76,15 @@ class App extends Component {
                       </div>
                     )}
                   />
+                  <Route exact path='/about' component={About} />
                   <Route
                     exact
                     path='/register'
                     render={() => (
                       <Form
                         formType={'Register'}
-                        formData={this.state.formData}
-                        handleUserFormSubmit={this.handleUserFormSubmit}
-                        handleFormChange={this.handleFormChange}
                         isAuthenticated={this.state.isAuthenticated}
+                        loginUser={this.loginUser}
                       />
                     )}
                   />
@@ -163,11 +93,9 @@ class App extends Component {
                     path='/login'
                     render={() => (
                       <Form
-                        formType={'Log In'}
-                        formData={this.state.formData}
-                        handleUserFormSubmit={this.handleUserFormSubmit}
-                        handleFormChange={this.handleFormChange}
+                        formType={'Login'}
                         isAuthenticated={this.state.isAuthenticated}
+                        loginUser={this.loginUser}
                       />
                     )}
                   />
@@ -181,7 +109,6 @@ class App extends Component {
                       />
                     )}
                   />
-                  <Route exact path='/about' component={About} />
                   <Route
                     exact
                     path='/status'
