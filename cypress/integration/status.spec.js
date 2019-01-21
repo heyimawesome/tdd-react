@@ -31,7 +31,7 @@ describe('Status', () => {
         cy.get('.navbar-burger').click();
         cy.contains('User Status').click();
         cy
-            .get('li > strong').contains('User Id:')
+            .get('li > strong').contains('User ID:')
             .get('li > strong').contains('Email:')
             .get('li').contains(email)
             .get('li > strong').contains('User Id:')
