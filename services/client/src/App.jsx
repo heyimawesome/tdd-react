@@ -37,6 +37,12 @@ class App extends Component {
     this.getUsers();
   }
 
+  componentWillMount() {
+    if (window.localStorage.getItem('authToken')) {
+      this.setState({ isAuthenticated: true });
+    }
+  }
+
   getUsers() {
     axios
       .get(`${process.env.REACT_APP_USERS_SERVICE_URL}/users`)
@@ -157,7 +163,7 @@ class App extends Component {
                     path='/login'
                     render={() => (
                       <Form
-                        formType={'Login'}
+                        formType={'Log In'}
                         formData={this.state.formData}
                         handleUserFormSubmit={this.handleUserFormSubmit}
                         handleFormChange={this.handleFormChange}

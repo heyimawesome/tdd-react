@@ -46,12 +46,12 @@ const NavBar = props => (
           )}
           {!props.isAuthenticated && (
             <Link className='navbar-item' to='/login'>
-              Login
+              Log In
             </Link>
           )}
           {props.isAuthenticated && (
             <Link className='navbar-item' to='/logout'>
-              Logout
+              Log Out
             </Link>
           )}
         </div>
