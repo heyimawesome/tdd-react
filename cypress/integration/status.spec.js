@@ -34,7 +34,7 @@ describe('Status', () => {
             .get('li > strong').contains('User ID:')
             .get('li > strong').contains('Email:')
             .get('li').contains(email)
-            .get('li > strong').contains('User Id:')
+            .get('li > strong').contains('User ID:')
             .get('li').contains(username)
             .get('a').contains('User Status')
             .get('a').contains('Log Out')
