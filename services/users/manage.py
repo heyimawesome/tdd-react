@@ -35,11 +35,11 @@ def seed_db():
     db.session.add(User(
         username='james',
         email='james@email.com',
-        password='password'))
+        password='password12'))
     db.session.add(User(
         username='hannah',
         email='hannah@email.com',
-        password='password'))
+        password='password12'))
     db.session.commit()
 
 
